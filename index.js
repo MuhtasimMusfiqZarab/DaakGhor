@@ -12,4 +12,8 @@ app.get("/", (req, res) => {
   res.send({ hi: "there" });
 });
 
-app.listen(5000);
+//dynamically listening to port for both local machine and heroku
+// whenver heroku runs our application it has the ability to inject the environment vriables
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT);
