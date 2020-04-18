@@ -29,10 +29,10 @@ passport.use(
     },
     (accessToken, refreshToken, profile, done) => {
       ///this will run whenever we get the profile of the user
-      console.log("a", accessToken);
-      console.log("r", refreshToken);
-      console.log("p", profile);
-      console.log("d", done);
+      console.log("accessToken", accessToken);
+      console.log("refreshToken", refreshToken);
+      console.log("profile", profile);
+      console.log("done", done);
     }
   )
 );
