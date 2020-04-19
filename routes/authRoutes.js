@@ -18,4 +18,20 @@ module.exports = (app) => {
   //googleStrategy has internally some identifier for 'google'
   // as there is a code inside the URL, google will know that use is not trying to authenticated for the first time (thus wanting to turn the code into user profile)
   app.get("/auth/google/callback", passport.authenticate("google"));
+
+  //loggin out the user
+  app.get("/api/logout", (req, res) => {
+    //passport attaches autometically logout property to req
+    //takes the cookie and kills the id inside there
+    req.logout();
+    res.send(req.user);
+  });
+
+  //this is fo testing application
+  app.get("/api/current_user", (req, res) => {
+    //passport autometically attach the user property to the req object whn the authenticatonflow is done
+    //passport also attaches some couple of other jfunctions to the request object as well
+
+    res.send(req.user);
+  });
 };
