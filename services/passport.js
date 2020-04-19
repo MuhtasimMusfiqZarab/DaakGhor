@@ -28,13 +28,26 @@ passport.use(
     },
     //this runs when we are redicted from the google flow
     (accessToken, refreshToken, profile, done) => {
-      ///this will run whenever we get the profile of the user
-      console.log("accessToken", accessToken);
-      console.log("refreshToken", refreshToken);
-      console.log("profile", profile);
-      console.log("done", done);
-      //user model class to create new model instance & save it to datrabase (save() is used to saving the user inside the database)
-      new User({ googleID: profile.id }).save();
+      //anytime we reach the database, we are initiating asynchronous action
+      //search all the records inside the collection  to see if the user already exts(thus no need to save the user)
+      User.findOne({ googleID: profile.id }).then((existingUser) => {
+        if (existingUser) {
+          //we already have a record saved
+
+          console.log(existingUser);
+          //to say pasport tht we are done with athentication flow
+          // we have to provide 2 arguments to it (errorObject,userRecord)
+          done(null, existingUser);
+        } else {
+          //user model class to create new model instance & save it to datrabase (save() is used to saving the user inside the database)
+          //call done when the user is successfull saved
+          new User({ googleID: profile.id }).save().then((user) => {
+            //to say pasport tht we are done with athentication flow
+            // we have to provide 2 arguments to it (errorObject,userRecord)
+            done(null, user);
+          });
+        }
+      });
     }
   )
 );
