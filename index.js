@@ -6,8 +6,11 @@ const keys = require("./config/keys");
 //1.mongoose require
 const mongoose = require("mongoose");
 
+//require the user model file to create the model when this file runs (here we define the model class)
+require("./models/User");
+
 //requiring passpostConfig
-// asnothing is exported from this module thus we will only require it to run
+// asnothing is exported from this module thus we will only require it to run (we will use the previous required file (where model is defined) here)
 require("./services/passport");
 
 //2.connect to mongoDB using mongooese //pass the address of the mongo instance inside
