@@ -6,6 +6,11 @@ const keys = require("./config/keys");
 //1.mongoose require
 const mongoose = require("mongoose");
 
+//express doesnt have any idea how to handl ecookies thus inport this
+const cookieSession = require("cookie-session");
+//we have oto tell passport to keep track of our users session
+const passport = require("passport");
+
 //require the user model file to create the model when this file runs (here we define the model class)
 require("./models/User");
 
@@ -19,6 +24,19 @@ mongoose.connect(keys.mongoURI);
 // create express application // a single node js project can have several diff express applications (but we are going to use single app here)
 // app object is used to set up configs that will listen for incoming requst to the particular route
 const app = express();
+
+//tell express that it needs to make use of cookies inside our application
+app.use(
+  // provide cookieSession a configuration object(this object expects two properties, 1st= maxAge(how long cookie last in milisecond)),2nd- keys to excrypt our cookie,  tis is always an array
+  cookieSession({
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    keys: [keys.cookieKey],
+  })
+);
+
+//tell passport that is should make use of cookies to handle authentication
+app.use(passport.initialize());
+app.use(passport.session());
 
 //-------------------------one way to do this
 
