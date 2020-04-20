@@ -41,6 +41,8 @@ passport.use(
       clientSecret: keys.googleClientSecret,
       //the route the user will be send to after permission is granted (this URI and the provided URI inside the cloud console must be same )
       callbackURL: "/auth/google/callback",
+      //for https and root url problem
+      proxy: true,
     },
     //this runs when we are redicted from the google flow
     (accessToken, refreshToken, profile, done) => {
