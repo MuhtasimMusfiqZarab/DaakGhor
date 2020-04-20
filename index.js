@@ -21,13 +21,20 @@ require("./services/passport");
 //2.connect to mongoDB using mongooese //pass the address of the mongo instance inside
 mongoose.connect(keys.mongoURI);
 
+//----------------------------------------------------------Middlwares(preproccesing of the incoming request)------------------------
+//each of the app.use is wiring up the middlewares
+//moddlewares are small funcitions can be used to moddify incoming requests to our app before they are sent to route hanlders
+//(cookiesession & 2 passport middlewares)
+
 // create express application // a single node js project can have several diff express applications (but we are going to use single app here)
 // app object is used to set up configs that will listen for incoming requst to the particular route
 const app = express();
 
 //tell express that it needs to make use of cookies inside our application
+//pulls some data out of the cookie
 app.use(
   // provide cookieSession a configuration object(this object expects two properties, 1st= maxAge(how long cookie last in milisecond)),2nd- keys to excrypt our cookie,  tis is always an array
+  //cookieSession object makes the cookie and sets it to req.session, so that passport middleware can use it
   cookieSession({
     maxAge: 30 * 24 * 60 * 60 * 1000,
     keys: [keys.cookieKey],
@@ -35,6 +42,7 @@ app.use(
 );
 
 //tell passport that is should make use of cookies to handle authentication
+//passport middlewares pulls the user id out of the cookie
 app.use(passport.initialize());
 app.use(passport.session());
 
