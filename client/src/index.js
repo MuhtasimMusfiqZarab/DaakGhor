@@ -9,8 +9,11 @@ import { createStore, applyMiddleware } from "redux";
 import App from "./components/App";
 import * as serviceWorker from "./serviceWorker";
 
+//import all the different reducers to put on the createStore
+import reducers from "./reducers";
+
 //create an instance of the redux store using createStore helper - 1st arg of this is all the reducers, 2nd arg- starting or initial state of the application(most relevant when used for server side rendering), 3rd arg is the applyMiddleware for using middlewares like redux-thunk
-const store = createStore(() => [], {}, applyMiddleware());
+const store = createStore(reducers, {}, applyMiddleware());
 
 ReactDOM.render(
   <React.StrictMode>
