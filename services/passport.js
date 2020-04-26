@@ -41,32 +41,28 @@ passport.use(
       clientSecret: keys.googleClientSecret,
       //the route the user will be send to after permission is granted (this URI and the provided URI inside the cloud console must be same )
       callbackURL: "/auth/google/callback",
-      //for https and root url problem
+      //for https and root url problem for going from one url to other for development purposes
       proxy: true,
     },
     //this runs when we are redicted from the google flow
-    (accessToken, refreshToken, profile, done) => {
+    async (accessToken, refreshToken, profile, done) => {
       //anytime we reach the database, we are initiating asynchronous action
       //search all the records inside the collection  to see if the user already exts(thus no need to save the user)
-      User.findOne({ googleID: profile.id }).then((existingUser) => {
-        if (existingUser) {
-          //we already have a record saved
-
-          console.log(existingUser);
-          //to say pasport tht we are done with athentication flow
-          // we have to provide 2 arguments to it (errorObject,userRecord)
-          done(null, existingUser);
-        } else {
-          //user model class to create new model instance & save it to datrabase (save() is used to saving the user inside the database)
-          //call done when the user is successfull saved
-          // new User() creates new model Instance which is a single record inside the collection
-          new User({ googleID: profile.id }).save().then((user) => {
-            //to say pasport tht we are done with athentication flow
-            // we have to provide 2 arguments to it (errorObject,userRecord)
-            done(null, user);
-          });
-        }
-      });
+      const existingUser = await User.findOne({ googleID: profile.id });
+      if (existingUser) {
+        //we already have a record saved
+        console.log(existingUser);
+        //to say pasport tht we are done with athentication flow
+        // we have to provide 2 arguments to it (errorObject,userRecord)
+        return done(null, existingUser);
+      }
+      //user model class to create new model instance & save it to datrabase (save() is used to saving the user inside the database)
+      //call done when the user is successfull saved
+      // new User() creates new model Instance which is a single record inside the collection
+      const user = await new User({ googleID: profile.id }).save();
+      //to say pasport tht we are done with athentication flow
+      // we have to provide 2 arguments to it (errorObject,userRecord)
+      done(null, user);
     }
   )
 );
