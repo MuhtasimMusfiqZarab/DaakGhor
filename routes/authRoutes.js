@@ -17,14 +17,25 @@ module.exports = (app) => {
   //route handler when user visits to the redirected URL (here we woll let passport do that to cimmunicated with google server)
   //googleStrategy has internally some identifier for 'google'
   // as there is a code inside the URL, google will know that use is not trying to authenticated for the first time (thus wanting to turn the code into user profile)
-  app.get("/auth/google/callback", passport.authenticate("google"));
+  //passport.authenticalte(google) is a middleware
+  //3rd arrow funct is there the request is sent to after this middleware is executed (which is an arrow function here)
+  // this 3rd arg redirects the user when we visits the route from the client
+  app.get(
+    "/auth/google/callback",
+    passport.authenticate("google"),
+    (req, res) => {
+      res.redirect("/surveys");
+    }
+  );
 
   //loggin out the user
   app.get("/api/logout", (req, res) => {
     //passport attaches autometically logout property to req
     //takes the cookie and kills the id inside there
     req.logout();
-    res.send(req.user);
+    // res.send(req.user);
+    //this is the redirect after logout
+    res.redirect("/");
   });
 
   //this is fo testing application
