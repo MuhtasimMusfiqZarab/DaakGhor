@@ -1,6 +1,7 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import Payments from './Payments';
 
 class Header extends Component {
   //rendering the header according to the auth value
@@ -8,11 +9,21 @@ class Header extends Component {
     //there are tree cases
     switch (this.props.auth) {
       case null:
-        return "Processing";
+        return 'Processing';
       case false:
-        return <a href="/auth/google">Login with google</a>;
+        return (
+          <li>
+            <a href="/auth/google">Login with google</a>
+          </li>
+        );
       default:
-        return <a href="/api/logout">Logout</a>;
+        //return an array of elements without using only one parent div (without creating any extra div)
+        return [
+          <li>
+            <Payments />
+          </li>,
+          <li href="/api/logout">Logout</li>,
+        ];
     }
   }
 
@@ -21,14 +32,11 @@ class Header extends Component {
     return (
       <nav>
         <div className="nav-wrapper">
-          <Link
-            href={this.props.auth ? "/surveys" : "/"}
-            className="brand-logo"
-          >
+          <Link to={this.props.auth ? '/surveys' : '/'} className="brand-logo">
             Emaily
           </Link>
           <ul id="nav-mobile" className="right hide-on-med-and-down">
-            <li>{this.renderContent()}</li>
+            {this.renderContent()}
           </ul>
         </div>
       </nav>
