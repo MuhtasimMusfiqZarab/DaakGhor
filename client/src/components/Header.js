@@ -19,10 +19,13 @@ class Header extends Component {
       default:
         //return an array of elements without using only one parent div (without creating any extra div)
         return [
-          <li>
+          //provideding static keys becasue we know that we are rendering two List items
+          <li key="Payment_button">
             <Payments />
           </li>,
-          <li href="/api/logout">Logout</li>,
+          <li key="Logout_button" href="/api/logout">
+            Logout
+          </li>,
         ];
     }
   }
