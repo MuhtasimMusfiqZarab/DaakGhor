@@ -1,7 +1,7 @@
-import axios from "axios";
+import axios from 'axios';
 
 //import types
-import { FETCH_USER } from "./types";
+import { FETCH_USER } from './types';
 
 //whenever redux thunk sees that a fucntin is returned from the action creator(not an action object) then it will automatically call the functin and pass in the dispatch funcitn as an argument
 
@@ -15,6 +15,17 @@ export const fetchUser = () =>
   // we normally return an action, but for redux thunk we are returning a funciton
   async (dispatch) => {
     //at any given pint in time, we can call dispatch (agter the network request successfully fetches the data)
-    const res = await axios.get("/api/current_user");
+    const res = await axios.get('/api/current_user');
     dispatch({ type: FETCH_USER, payload: res.data });
   };
+
+//Action creator to send the stripe token to the backend server(backend server will charge the payment using this token )---------------
+
+//1st arrow returns and async function which will be called with dispatch
+
+export const handleToken = (token) => async (dispatch) => {
+  const res = await axios.post('/api/stripe', token);
+  console.log(res);
+  //same Type because we will fetch the exact user model which was fetched earlier (but it contains the credits inside of it, where previously it was not)
+  dispatch({ type: FETCH_USER, payload: res });
+};

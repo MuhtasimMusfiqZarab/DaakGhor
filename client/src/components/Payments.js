@@ -3,14 +3,17 @@
 import React from 'react';
 import StripeCheckout from 'react-stripe-checkout';
 
-const Payments = () => {
+import { connect } from 'react-redux';
+import * as actions from '../actions';
+
+const Payments = (props) => {
   return (
     // we need some required configuration options
     <StripeCheckout
       //required 3 config options----------------------------------------
       amount={500}
       //token argument is the entire object that represents the pendingcharge
-      token={(token) => console.log(token)} //token is expected to receive a callback func which will be invocked after we get the authorization token
+      token={(token) => props.handleToken(token)} //token is expected to receive a callback func which will be invocked after we get the authorization token
       stripeKey={process.env.REACT_APP_STRIPE_KEY}
       //other configuration props-----------------------------------------
       name="Emailyfy" //it is the header of the stripe form
@@ -22,4 +25,4 @@ const Payments = () => {
   );
 };
 
-export default Payments;
+export default connect(null, actions)(Payments);
