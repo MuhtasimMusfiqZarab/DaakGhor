@@ -1,10 +1,13 @@
 const keys = '../config/keys.js';
 const stripe = require('stripe')(keys.stripeSecretKey);
 
+//requiring this route specific middleware
+const requireLogin = require('../middlewares/requireLogin');
+
 // create an arrow function and immediately export it
 module.exports = (app) => {
   //post reuest to api/stripe route
-  app.post('/api/stripe', async (req, res) => {
+  app.post('/api/stripe', requireLogin, async (req, res) => {
     //-------see what(stripe authorization tokenpppp) is sent from the client stripe
     /// this outputs a req body which contains a token which identifies the credit card
     // that token would allow us to charge the amount we wanted
@@ -19,7 +22,7 @@ module.exports = (app) => {
       //souce of the credit card which is the id (token) included in the request id
       source: req.body.id,
     });
-    //console.log(charge);// contains the charge object after the billing is done
+    console.log(charge); // contains the charge object after the billing is done
 
     //---- change the used model after the payment is done with the creditr
 
