@@ -7,6 +7,7 @@ class Header extends Component {
   //rendering the header according to the auth value
   renderContent() {
     //there are tree cases
+    //this.props.auth contains the user model (this model includes the current credit of the user)
     switch (this.props.auth) {
       case null:
         return 'Processing';
@@ -18,10 +19,14 @@ class Header extends Component {
         );
       default:
         //return an array of elements without using only one parent div (without creating any extra div)
+        //render array of components if the user is logged in
         return [
           //provideding static keys becasue we know that we are rendering two List items
           <li key="Payment_button">
             <Payments />
+          </li>,
+          <li key="credits" style={{ margin: '0 10px' }}>
+            Credits: {this.props.auth.credits}
           </li>,
           <li key="Logout_button" href="/api/logout">
             Logout
