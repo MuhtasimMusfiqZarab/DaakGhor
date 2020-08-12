@@ -19,6 +19,16 @@ module.exports = (app) => {
       //souce of the credit card which is the id (token) included in the request id
       source: req.body.id,
     });
-    console.log(charge);
+    //console.log(charge);// contains the charge object after the billing is done
+
+    //---- change the used model after the payment is done with the creditr
+
+    // somehow get the current user model and modify the model to update the user info(which is req.user set up authometically by passport) // the person who made the payment
+    //update credit
+    req.user.credit += 5;
+    //save the user in DB // here user variable is the updated user model
+    const user = await req.user.save();
+    // we then give the updated user model as the response
+    res.send(user);
   });
 };

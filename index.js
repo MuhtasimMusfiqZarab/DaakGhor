@@ -48,6 +48,7 @@ app.use(
 
 //tell passport that is should make use of cookies to handle authentication
 //passport middlewares pulls the user id out of the cookie
+// this two line set up the current logged in user inside req.user
 app.use(passport.initialize());
 app.use(passport.session());
 
